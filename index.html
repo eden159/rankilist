@@ -53,13 +53,13 @@
                 <div class="form-group">
                     <input type="number" id="seconds" class="form-control" placeholder="Seconds">
                 </div>
-                <div class="form-group">
-                    <label>Gender</label>
-                    <select id="gender">
-                        <option value="m">Male</option>
-                        <option value="f">Female</option>
-                    </select>
-                </div>
+<!--                <div class="form-group">-->
+<!--                    <label>Gender</label>-->
+<!--                    <select id="gender">-->
+<!--                        <option value="m">Male</option>-->
+<!--                        <option value="f">Female</option>-->
+<!--                    </select>-->
+<!--                </div>-->
                 <button type="button" class="btn btn-primary" onclick="calculateRunnerRating(competitionInfo, coefficient)">Show rating</button>
                 <div id="runnerResult" style="display: none;">
                     Rating: <mark id="resRun"></mark>
@@ -488,7 +488,7 @@
         var hours = $('#hours').val();
         var minutes = $('#minutes').val();
         var seconds = $('#seconds').val();
-        var gender = $('#gender').val();
+        // var gender = $('#gender').val();
 
         if(isNaN(hours) || hours == '' || hours*1 < 0){
             alert('Please enter valid hours');
@@ -505,10 +505,10 @@
             return;
         }
 
-        if (gender != 'm' && gender != 'f') {
-            alert('Please select a valid gender');
-            return;
-        }
+        // if (gender != 'm' && gender != 'f') {
+        //     alert('Please select a valid gender');
+        //     return;
+        // }
 
         var records;
 
