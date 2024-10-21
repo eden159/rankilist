@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>Ranglist Balkan League</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Balkan Trail League Ranglist">
+    <meta name="author" content="Nikolay Kolev">
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Rating Calculator</h2>
+    <div class="panel panel-default">
+        <div class="panel-heading">Competition information</div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label for="gpxFileInput">GPX Route File</label>
+                <div class="input-group">
+                    <input type="file" id="gpxFileInput" accept=".gpx">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="stations">Number of Stations</label>
+                <div class="input-group">
+                    <input type="number" id="stations" value="1">
+                </div>
+            </div>
+
+            <div style="display: none;" id="runner">
+                <h3>Calculate runner rating.</h3>
+                <div class="form-group">
+                    <label for="gpxFileInput">Competition coefficient</label>
+                    <div class="input-group">
+                        <input type="number" id="coefficient" class="form-control" placeholder="coefficient">
+                    </div>
+                </div>
+                Please input the runner's finish time:
+                <div class="form-group">
+                    <input type="number" id="hours" class="form-control" placeholder="Hours">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="minutes" class="form-control" placeholder="Minutes">
+                </div>
+                <div class="form-group">
+                    <input type="number" id="seconds" class="form-control" placeholder="Seconds">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="gender">
+                        <option value="m">Male</option>
+                        <option value="f">Female</option>
+                    </select>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="calculateRunnerRating(competitionInfo, coefficient)">Show rating</button>
+                <div id="runnerResult" style="display: none;">
+                    Rating: <mark id="resRun"></mark>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-center" style="display: none;" id="compTitle">Competition performance rating table</h2>
+        <table class="table" style="display: none;" id="competitionResults">
+            <thead>
+            <tr>
+                <th>Achievement</th>
+                <th>Record</th>
+<!--                <th>Women</th>-->
+                <th>Code</th>
+                <th>Description</th>
+                <th>Level</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>&gt;1000</td>
+                <td id="men1"></td>
+<!--                <td id="women1"></td>-->
+                <td style="background-color: #FF0000;">WR</td>
+                <td style="background-color: #FF0000;">World record</td>
+                <td>World class</td>
+            </tr>
+            <tr>
+                <td>&gt;900</td>
+                <td id="men2"></td>
+<!--                <td id="women2"></td>-->
+                <td style="background-color: #FE230F;">AAA</td>
+                <td style="background-color: #FE230F;">Elite 1</td>
+                <td>World class</td>
+            </tr>
+            <tr>
+                <td>&gt;850</td>
+                <td id="men3"></td>
+<!--                <td id="women3"></td>-->
+                <td style="background-color: #FD5612;">AA</td>
+                <td style="background-color: #FD5612;">Elite 2</td>
+                <td>World class</td>
+            </tr>
+            <tr>
+                <td>&gt;800</td>
+                <td id="men4"></td>
+<!--                <td id="women4"></td>-->
+                <td style="background-color: #FC6812;">A</td>
+                <td style="background-color: #FC6812;">Elite 3</td>
+                <td>World class</td>
+            </tr>
+            <tr>
+                <td>&gt;750</td>
+                <td id="men5"></td>
+<!--                <td id="women5"></td>-->
+                <td style="background-color: #FB8710;">BBB</td>
+                <td style="background-color: #FB8710;">Expert 1</td>
+                <td>National level</td>
+            </tr>
+            <tr>
+                <td>&gt;700</td>
+                <td id="men6"></td>
+<!--                <td id="women6"></td>-->
+                <td style="background-color: #FE9D10;">BB</td>
+                <td style="background-color: #FE9D10;">Expert 2</td>
+                <td>National level</td>
+            </tr>
+            <tr>
+                <td>&gt;650</td>
+                <td id="men7"></td>
+<!--                <td id="women7"></td>-->
+                <td style="background-color: #FDB513;">B</td>
+                <td style="background-color: #FDB513;">Expert 3</td>
+                <td>National level</td>
+            </tr>
+            <tr>
+                <td>&gt;600</td>
+                <td id="men8"></td>
+<!--                <td id="women8"></td>-->
+                <td style="background-color: #FCE213;">CCC</td>
+                <td style="background-color: #FCE213;">Advanced 1</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&gt;550</td>
+                <td id="men9"></td>
+<!--                <td id="women9"></td>-->
+                <td style="background-color: #FBFB11;">CC</td>
+                <td style="background-color: #FBFB11;">Advanced 2</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&gt;500</td>
+                <td id="men10"></td>
+<!--                <td id="women10"></td>-->
+                <td style="background-color: #FFFF9A;">C</td>
+                <td style="background-color: #FFFF9A;">Advanced 3</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&gt;450</td>
+                <td id="men11"></td>
+<!--                <td id="women11"></td>-->
+                <td>DDD</td>
+                <td>Average 1</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&gt;400</td>
+                <td id="men12"></td>
+<!--                <td id="women12"></td>-->
+                <td>DD</td>
+                <td>Average 2</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&gt;350</td>
+                <td id="men13"></td>
+<!--                <td id="women13"></td>-->
+                <td>D</td>
+                <td>Average 3</td>
+                <td>&nbsp;</td>
+            </tr>
+            <tr>
+                <td>&lt;350</td>
+                <td id="men14"></td>
+<!--                <td id="women14"></td>-->
+                <td>E</td>
+                <td>Beginner</td>
+                <td>&nbsp;</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/togeojson/0.16.0/togeojson.js"></script>
+<script src="./gpxparser.js"></script>
+<script>
+    function calculateCoefficient(competitionInfo, numberStations) {
+        // Константи от регресионния анализ
+        const a = 0.1406797502;
+        const b = -0.1469203261;
+
+        let flatDistance = competitionInfo.distance + competitionInfo.denivelation.ascent / 100;
+        let penalty = 0;
+
+        switch (true) {
+            case flatDistance / numberStations < 5:
+                penalty = 30;
+                break;
+            case flatDistance / numberStations < 7:
+                penalty = 25;
+                break;
+            case flatDistance / numberStations < 9:
+                penalty = 20;
+                break;
+            case flatDistance / numberStations < 1:
+                penalty = 15;
+                break;
+            case flatDistance / numberStations < 13:
+                penalty = 10;
+                break;
+        }
+        flatDistance = flatDistance - penalty;
+
+        // Функция за изчисление на IT (Индекс на Трудност)
+        function calculateIT(data) {
+            let IT = 0;
+            let totalLength = 0;
+
+            // Средни наклони за категориите (десетични)
+            const averageSlopes = {
+                '0-5': 2.5,
+                '5-10': 7.5,
+                '10-15': 12.5,
+                '15-20': 17.5,
+                '20-25': 22.5,
+                '25-30': 27.5,
+                '30+': 32.5
+            };
+
+            for (let category in data) {
+                totalLength += data[category].totalLength;
+            }
+
+            for (let category in data) {
+                let length = data[category].totalLength;
+                let weight = averageSlopes[category];
+                let percentage = length / totalLength;
+                IT += percentage * weight;
+            }
+
+            return IT;
+        }
+
+        let multiplier;
+
+        switch (true) {
+            case flatDistance <= 24:
+                multiplier = 1;
+                break;
+            case flatDistance <= 44:
+                multiplier = 1.1;
+                break;
+            case flatDistance <= 74:
+                multiplier = 1.2;
+                break;
+            case flatDistance <= 114:
+                multiplier = 1.3;
+                break;
+            case flatDistance <= 154:
+                multiplier = 1.4;
+                break;
+            case flatDistance <= 209:
+                multiplier = 1.5;
+                break;
+            default:
+                multiplier = 1.6;
+                break;
+        }
+
+        // Изчисляване на IT за изкачванията и спусканията
+        // let ITAscent = calculateIT(competitionInfo.ascentData);
+        // let ITDescent = calculateIT(competitionInfo.descentData);
+
+        // Обща стойност на IT
+        // let IT = (ITAscent + ITDescent) * multiplier;
+        let IT = Math.atan(competitionInfo.denivelation.ascent / (competitionInfo.distance * 1000)) * (180 / Math.PI) * multiplier;
+        // Изчисляване на коефициента K
+        console.log('IT: ', IT);
+        let K = Math.exp(b) * Math.pow(IT, a);
+
+        return K;
+    }
+
+    // Инициализиране на GPXParser с id на file input и праг за дистанция и праг на наклон
+    const gpxParser = new GPXParser('gpxFileInput', 10, 100, 35);
+
+    // Слушаме за събитието за готовност на GPX файла
+    gpxParser.addEventListener('gpxRouteInfoEvent', (e) => {
+        competitionInfo = e.detail;
+        coefficient = calculateCoefficient(
+            competitionInfo,
+            document.getElementById('stations').value
+        );
+        document.getElementById('coefficient').value = coefficient;
+        calculateTable(competitionInfo, coefficient);
+    });
+
+    // Слушаме за събитие при промяна на стойността на коефициента
+    $('#coefficient').on('change', function() {
+        coefficient = $(this).val();
+        calculateTable(competitionInfo, coefficient);
+    });
+
+    let coefficient = 1;
+    let competitionInfo;
+</script>
+
+<script type="text/javascript">
+    var menRecords = {
+        '0': '00:00:00',
+        '0.4': '00:00:43',
+        '0.8': '00:01:41',
+        '1.0': '00:02:12',
+        '1.5': '00:03:26',
+        '1.609': '00:03:43',
+        '2.0': '00:04:43',
+        '3.0': '00:07:17',
+        '5.0': '00:12:35',
+        '8.0': '00:21:11',
+        '10.0': '00:26:11',
+        '15.0': '00:40:27',
+        '16.09': '00:44:04',
+        '20.0': '00:54:29',
+        '21.1': '00:57:31',
+        '25.0': '01:11:08',
+        '30.0': '01:25:40',
+        '40.0': '01:54:23',
+        '42.195': '02:00:35',
+        '50.0': '02:38:43',
+        '80.47': '04:48:21',
+        '98.496': '06:00:00',
+        '100.0': '06:05:35',
+        '160.9': '10:51:39',
+        '177.410': '12:00:00',
+        '319.614': '24:00:00',
+        '433.095': '48:00:00'
+    };
+
+    //ignoring for now
+    var womenRecords = {
+        '0': '00:00:00',
+        '0.4': '00:00:47',
+        '0.8': '00:01:53',
+        '1.0': '00:02:29',
+        '1.5': '00:03:49',
+        '1.609': '00:04:07',
+        '2.0': '00:05:19',
+        '3.0': '00:08:06',
+        '5.0': '00:14:00',
+        '8.0': '00:24:30',
+        '10.0': '00:29:01',
+        '12.0': '00:38:05',
+        '15.0': '00:44:20',
+        '16.09': '00:49:21',
+        '20.0': '00:59:35',
+        '21.1': '01:05:16',
+        '25.0': '01:18:03',
+        '30.0': '01:34:01',
+        '35.0': '01:49:41',
+        '42.195': '02:09:56',
+        '50.0': '02:59:54',
+        '80.47': '05:40:18',
+        '81.1': '06:00:00',
+        '100.0': '06:33:11',
+        '153.6': '12:00:00',
+        '160.9': '12:42:40',
+        '270.16': '24:00:00',
+        '435.366': '48:00:00'
+    };
+
+    function naismithDistance(distance, dPlus) {
+        return distance*1 + (dPlus/1000)*7.92;
+    }
+
+    function calculateRealDistance(competitionInfo, coefficient) {
+        //SIERRE-ZINAL = 0.962 31/2190
+        //zegama = 0.979 43/2640
+        //eiger ultra trail = 0.929 17/860
+        //vitosha 100 2024 = 0.864 100.58/2370
+        //pirin ultra 160 2024 = 1.227 160/11000
+        //utmb 2024 = 1.024 176/10040
+        //tryavna = 1.065 153.7/6290
+        //persenk = 1.098 159.36/7055
+        console.log(competitionInfo);
+        return (naismithDistance(competitionInfo.distance, competitionInfo.denivelation.ascent)) * coefficient;
+    }
+
+    function getRecordSpeed(distance, records) {
+        var recordDistance, previousDistance = false, currentDistance = false;
+
+        for(recordDistance in records) {
+
+            currentDistance = recordDistance;
+
+            if (recordDistance*1 > distance) {
+                break;
+            }
+
+            previousDistance = recordDistance;
+        }
+
+        var prevSplit = records[previousDistance].split(':');
+        var curSplit = records[currentDistance].split(':');
+
+        var prevSpeed = calculateSpeed(previousDistance, prevSplit[0], prevSplit[1], prevSplit[2]);
+        var curSpeed = calculateSpeed(currentDistance, curSplit[0], curSplit[1], curSplit[2]);
+
+        var diffDistance = currentDistance*1 - previousDistance*1;
+        var dDistanceSelected = distance*1 - previousDistance*1;
+        var percentDistance = (dDistanceSelected*100)/diffDistance;
+
+        var diffSpeed = prevSpeed*1 - curSpeed*1;
+
+        return prevSpeed - (diffSpeed*percentDistance) / 100;
+    }
+
+    function calculateSpeed(distance, hours, minutes, seconds) {
+        var distunitsvalue = 1000; //in kilometers
+        var speedunitsvalue = 0.277777777777777777777777777777777777; //km per hour
+        var temp = ((parseFloat(hours) * 3600) + (parseFloat(minutes) * 60) + parseFloat(seconds));
+        return ((distance * distunitsvalue)  / (temp * speedunitsvalue));
+    }
+
+    function calculateTime(distance, speed) {
+        var data = {};
+        var distunitsvalue = 1000;
+        var speedunitsvalue = 0.277777777777777777777777777777777777;
+        data['seconds'] = (distance * distunitsvalue) / (speed * speedunitsvalue);
+
+        data['hours'] = parseInt(data['seconds'] / 3600);
+        data['seconds'] = data['seconds'] - (data['hours'] * 3600);
+        data['minutes'] = parseInt(data['seconds'] / 60);
+        data['seconds'] = parseInt(data['seconds'] - (data['minutes'] * 60));
+        return data;
+    }
+
+    function getRecordData(competitionInfo, coefficient) {
+
+        var realDistance = calculateRealDistance(competitionInfo, coefficient);
+        var menRecordSpeed = getRecordSpeed(realDistance, menRecords);
+        // var womenRecordSpeed = getRecordSpeed(realDistance, womenRecords);
+
+        var i, data = {}, percent;
+        for (i = 1; i <= 14; i++) {
+
+            percent = (i - 1) * 5;
+
+            if (percent >= 5) {
+                percent += 5;
+            }
+
+            data[i] = {
+                'men': calculateTime(realDistance, (menRecordSpeed*(100-percent))/100),
+                // 'women': calculateTime(realDistance, (womenRecordSpeed*(100-percent))/100)
+            }
+        }
+
+        return data;
+    }
+
+    function pad(num, size) {
+        var s = num+"";
+        while (s.length < size) s = "0" + s;
+        return s;
+    }
+
+    function calculateRunnerRating(competitionInfo, coefficient) {
+        var hours = $('#hours').val();
+        var minutes = $('#minutes').val();
+        var seconds = $('#seconds').val();
+        var gender = $('#gender').val();
+
+        if(isNaN(hours) || hours == '' || hours*1 < 0){
+            alert('Please enter valid hours');
+            return;
+        }
+
+        if(isNaN(minutes) || minutes == '' || minutes*1 < 0 || minutes*1 > 59){
+            alert('Please enter valid minutes');
+            return;
+        }
+
+        if(isNaN(seconds) || seconds == '' || seconds*1 < 0 || seconds*1 > 59){
+            alert('Please enter valid seconds');
+            return;
+        }
+
+        if (gender != 'm' && gender != 'f') {
+            alert('Please select a valid gender');
+            return;
+        }
+
+        var records;
+
+        // if (gender == 'm') {
+            records = menRecords;
+        // } else {
+        //     records = womenRecords;
+        // }
+
+        var realDistance = calculateRealDistance(competitionInfo, coefficient);
+        var recordSpeed = getRecordSpeed(realDistance, records);
+        var runnerSpeed = calculateSpeed(realDistance, hours*1, minutes*1, seconds*1);
+
+        $('#resRun').html(Math.round((1000 * ((runnerSpeed / recordSpeed)*100))/100));
+        $('#runnerResult').show();
+    }
+
+    function calculateTable(competitionInfo, coefficient) {
+
+        var recordData = getRecordData(competitionInfo, coefficient), i;
+
+        if (recordData === false) {
+            return;
+        }
+
+        for(i in recordData) {
+            $('#men' + i).html(pad(recordData[i].men.hours, 2)+':'+pad(recordData[i].men.minutes, 2)+':'+pad(recordData[i].men.seconds, 2));
+            // $('#women' + i).html(pad(recordData[i].women.hours, 2)+':'+pad(recordData[i].women.minutes, 2)+':'+pad(recordData[i].women.seconds, 2));
+        }
+
+        $('#runner').show();
+        $('#competitionResults').show();
+        $('#compTitle').show();
+    }
+
+    //console.log(calculateRunnerRating(42.195, 100, 3, 30, 46, 'm'));
+</script>
+</body>
+</html>
